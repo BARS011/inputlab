@@ -3,12 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#edf0f5">
+<meta name="theme-color" content="#f2f2f7">
 <title>InputLab 3D — Klaviatura va sichqoncha testi</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%235ac8fa'/%3E%3Cstop offset='100%25' stop-color='%23007aff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='url(%23g)'/%3E%3Crect x='10' y='18' width='44' height='30' rx='6' fill='none' stroke='white' stroke-width='2.5'/%3E%3Cpath d='M16 26h6M26 26h6M36 26h6M46 26h2M16 34h6M26 34h6M36 34h6M46 34h2M20 42h24' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='14' r='5' fill='%2330d158'/%3E%3C/svg%3E">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   color-scheme:light dark;
@@ -263,8 +260,10 @@ h2{font-size:19px;font-weight:700;letter-spacing:-.022em;margin:0 0 3px;line-hei
 @keyframes wspinU{to{background-position-y:-16px}}
 @keyframes wspinD{to{background-position-y:16px}}
 .m-side{position:absolute;left:2px;width:16px;height:38px;border-radius:10px 4px 4px 10px;background:linear-gradient(90deg,#050607,#2b323d);transform:translateZ(10px);box-shadow:inset 0 1px 0 #ffffff22,0 0 0 1px #000000aa,0 8px 14px rgba(0,0,0,.4);transition:background .2s,box-shadow .2s,transform .12s;z-index:20;cursor:pointer;pointer-events:auto}
-.m-side.a{top:34%;left:2px}
-.m-side.b{top:50%;left:2px}
+.m-side.a{top:30%;left:2px}
+.m-side.b{top:44%;left:2px}
+.m-side.c{top:58%;left:2px}
+.m-side.d{top:72%;left:2px}
 .m-side::after{content:"";position:absolute;left:3px;right:3px;top:6px;height:calc(100% - 12px);border-radius:6px;background:linear-gradient(180deg,#ffffff20,transparent);opacity:.9}
 .m-side.lit{background:linear-gradient(90deg,color-mix(in srgb,var(--pal-ac) 70%,#000),var(--pal-ac));box-shadow:0 0 22px 5px color-mix(in srgb,var(--pal-ac) 55%,transparent),inset 0 1px 0 #ffffff66}
 .m-side:active{transform:translateZ(6px) scale(.97)}
@@ -358,7 +357,7 @@ footer b{color:var(--mu)}
 <div class="wrap">
   <header class="appbar">
     <div class="brand">
-      <div class="logo" aria-hidden="true"><svg viewBox="0 0 64 64" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5ac8fa"/><stop offset="100%" stop-color="#007aff"/></linearGradient></defs><rect x="2" y="2" width="60" height="60" rx="16" fill="url(#lg)"/><rect x="10" y="18" width="44" height="30" rx="5" stroke="#fff" stroke-width="3"/><path d="M16 26h5M25 26h5M34 26h5M43 26h5M16 34h5M25 34h5M34 34h5M43 34h5M19 42h26" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="12" r="4.5" fill="#30d158"/></svg></div>
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 64 64" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ilLogoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5ac8fa"/><stop offset="100%" stop-color="#007aff"/></linearGradient></defs><rect x="2" y="2" width="60" height="60" rx="16" fill="url(#ilLogoGrad)"/><rect x="10" y="18" width="44" height="30" rx="5" stroke="#fff" stroke-width="3"/><path d="M16 26h5M25 26h5M34 26h5M43 26h5M16 34h5M25 34h5M34 34h5M43 34h5M19 42h26" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="50" cy="12" r="4.5" fill="#30d158"/></svg></div>
       <div class="brandtx"><b>InputLab</b><span>3D device lab</span></div>
     </div>
     <div class="apptools">
@@ -397,7 +396,6 @@ footer b{color:var(--mu)}
       <div class="grp"><div class="chips" id="cz"></div></div>
       <div class="grp"><span data-ux="kbSkin">Klaviatura uslubi</span><div class="chips" id="ckskin"></div></div>
       <div class="grp"><span data-ux="palette">Rang</span><div class="swatches" id="palKb"></div></div>
-      <div class="grp"><span>Progress</span><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div class="bar" style="flex:1;min-width:120px"><i id="kbBar"></i></div><b id="kbPct" style="font-variant-numeric:tabular-nums">0%</b></div></div>
 
       <div class="coach" id="kbCoach">
         <div class="coach-ic">⌨</div>
@@ -485,6 +483,8 @@ footer b{color:var(--mu)}
               <div class="m-wheel" id="mWheel" data-mb="w"></div>
               <div class="m-side a" data-mb="3"></div>
               <div class="m-side b" data-mb="4"></div>
+              <div class="m-side c" data-mb="5"></div>
+              <div class="m-side d" data-mb="6"></div>
               <div class="m-logo" aria-hidden="true">IL</div>
             </div>
             <div class="m-hand" id="mHand" aria-hidden="true"><div class="hshadow"></div><div class="puck"></div></div>
@@ -772,10 +772,8 @@ function applyMouseSkin(){
  el.classList.toggle("bt",PF.conn==="bt");
  const layers=20;
  $("#mStack").innerHTML=Array.from({length:layers},(_,i)=>`<i style="transform:translateZ(${(i*2.4).toFixed(1)}px) scale(${(1-i*.003).toFixed(3)})"></i>`).join("");
- // keep side buttons visible (fixed layout)
- const sideA=$("#m3d .m-side.a"),sideB=$("#m3d .m-side.b");
- if(sideA) sideA.style.display="";
- if(sideB) sideB.style.display="";
+ // keep side buttons visible (fixed layout, independent of button-count setting)
+ $$(".m-side",el).forEach(s=>s.style.display="");
 }
 function mBuild(){
  const base=EXP[PF.btns]||EXP[5];
@@ -880,7 +878,7 @@ function mPaint(){
  }
  const s=mList[mi],el=mTargetEl(s.id);
  if(el)el.classList.add("next");
- $("#mTarget").textContent={0:"L",1:"M",2:"R",3:"Side 1",4:"Side 2"}[s.id]||(s.id==="up"?"↑":"↓");
+ $("#mTarget").textContent={0:"L",1:"M",2:"R",3:"Side 1",4:"Side 2",5:"Side 3",6:"Side 4"}[s.id]||(s.id==="up"?"↑":"↓");
  $("#mDots").innerHTML=mList.map((_,i)=>`<i class="${i<mi?"done":i===mi?"on":""}"></i>`).join("");
  if(mHand){mHand.style.opacity=1;const pos=MPOS[s.id]||[106,160];mHand.style.transform=`translate3d(${pos[0]}px,${pos[1]}px,0)`}
 }
@@ -1069,7 +1067,7 @@ $$("nav button").forEach(b=>b.onclick=()=>{
 try{const sd=ld("ilde");if(sd==="pc"||sd==="laptop")PF.device=sd;else PF.device=detectDevice();}catch(e){PF.device=detectDevice();}
 PF.size=DEV[PF.device].defaultSize;
 try{const ks=ld("ilks");if(ks==="classic"||ks==="low")PF.kskin=ks;}catch(e){}
-aT();aP();renderKb();rMp();mBuild();aL();setCps();syncMs();
+aT();aP();renderKb();rMp();mBuild();aL();setCps();syncKb();syncMs();
 if(kbEl)kbEl.dataset.kskin=PF.kskin||"classic";
 applyMouseSkin();
 </script>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>InputLab</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f4f6;--cd:#fff;--c2:#ececf0;--tx:#111214;--mu:#6b6f76;--ac:#3e91ff;--acs:#e3efff;--ok:#1f9d55;--oks:#dcf5e6;--wn:#b36b00;--wns:#fff0d1;--bad:#d93636;--bads:#fde3e3;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--cd:#1d1d1f;--c2:#2c2c2f;--tx:#f2f2f4;--mu:#9a9ca3;--ac:#4d9bff;--acs:#12263f;--ok:#4cd07d;--oks:#10301d;--wn:#ffbf47;--wns:#33280a;--bad:#ff6b6b;--bads:#3a1717}}
+:root[data-theme="dark"]{--bg:#000;--cd:#1d1d1f;--c2:#2c2c2f;--tx:#f2f2f4;--mu:#9a9ca3;--ac:#4d9bff;--acs:#12263f;--ok:#4cd07d;--oks:#10301d;--wn:#ffbf47;--wns:#33280a;--bad:#ff6b6b;--bads:#3a1717}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 15px/1.5 Figtree,system-ui,"Segoe UI","Noto Sans",sans-serif;min-height:100vh}
+.w{max-width:1060px;margin:0 auto;padding:14px 16px 56px}
+.bar{display:flex;justify-content:flex-end;gap:8px}
+select,.ib{height:42px;border:0;border-radius:999px;background:var(--cd);color:var(--tx);font:600 14px inherit;font-family:inherit;padding:0 14px;cursor:pointer}
+.ib{width:42px;padding:0;font-size:18px}
+h1{font-size:clamp(34px,7vw,46px);font-weight:800;letter-spacing:-.03em;margin:44px 0 22px;line-height:1.05}
+h2{font-size:18px;font-weight:700;margin:0 0 4px}
+nav{display:flex;gap:8px;margin-bottom:18px;overflow-x:auto}
+nav button{border:0;background:var(--cd);color:var(--mu);font:600 15px inherit;font-family:inherit;padding:11px 22px;border-radius:999px;cursor:pointer;white-space:nowrap}
+nav button[aria-selected=true]{background:var(--ac);color:#fff}
+button:focus-visible,select:focus-visible,input:focus-visible,#pad:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.card{background:var(--cd);border-radius:28px;padding:20px}
+.hint{color:var(--mu);margin:0 0 14px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.row .card{border-radius:24px;padding:16px 18px}
+.st b{display:block;font-size:28px;font-weight:800;line-height:1.15;word-break:break-word}
+.st span{color:var(--mu);font-size:13px}
+.grp{margin-bottom:12px}.grp>span{display:block;color:var(--mu);font-size:13px;font-weight:600;margin:0 0 6px 4px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip,.btn{border:0;background:var(--c2);color:var(--tx);font:600 14px inherit;font-family:inherit;padding:9px 16px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ac);color:#fff}
+.btn.p{background:var(--ac);color:#fff}
+#kbw{overflow-x:auto;direction:ltr;margin:6px 0 10px;border-radius:20px;background:var(--c2)}
+#kb{position:relative}
+.key{position:absolute;background:var(--cd);color:var(--mu);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:clamp(9px,calc(var(--u)*.27),14px);font-weight:600;user-select:none;box-shadow:0 2px 0 #0002;transition:background .08s}
+.key.ok{background:var(--oks);color:var(--ok)}
+.key.dn{background:var(--ac);color:#fff;transform:translateY(2px);box-shadow:none}
+.key.bd{background:var(--bads);color:var(--bad)}
+.key.op{outline:1.5px dashed var(--bd,#8886);outline-offset:-3px}
+.lg{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--mu)}
+.lg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-inline-end:6px;vertical-align:-1px}
+.lk{display:flex;gap:6px;margin-bottom:12px}
+.lk span,.mb span{background:var(--c2);color:var(--mu);padding:5px 12px;border-radius:999px;font-size:13px;font-weight:600}
+.lk span.on,.mb span.on{background:var(--oks);color:var(--ok)}
+.sp{height:14px}
+#tx{font-size:18px;line-height:1.7;margin:8px 0 12px;max-width:64ch;direction:ltr;text-align:start}
+#tx .g{color:var(--ok)}#tx .r{color:var(--bad);background:var(--bads)}#tx .cur{background:var(--acs);border-bottom:2px solid var(--ac)}
+#ti{width:100%;font:16px inherit;font-family:inherit;padding:13px 16px;border:0;border-radius:18px;background:var(--c2);color:var(--tx);direction:ltr}
+.two{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:820px){.two{grid-template-columns:1fr 1fr}}
+#pad{height:240px;border-radius:28px;background:var(--cd);border:2px dashed var(--c2);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:crosshair;user-select:none;touch-action:none;padding:12px}
+#pad:hover{border-color:var(--ac)}
+.mb{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;justify-content:center}
+#cps{width:100%;height:130px;border-radius:24px;border:0;background:var(--acs);color:var(--ac);font:800 24px inherit;font-family:inherit;cursor:pointer;user-select:none}
+.sc{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:14px}
+.sc1{text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}
+.ring{width:104px;height:104px;border-radius:50%;background:conic-gradient(var(--ac) calc(var(--v)*1%),var(--c2) 0);display:grid;place-items:center;margin-bottom:6px}
+.ring i{width:82px;height:82px;border-radius:50%;background:var(--cd);display:grid;place-items:center;font:800 30px inherit;font-style:normal;font-family:inherit}
+.sc1 span{color:var(--mu)}
+.sum{background:var(--acs);border-radius:24px;padding:16px 20px;margin-bottom:14px}.sum ul{margin:6px 0 0;padding-inline-start:20px}
+.it{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--c2)}
+.it:first-of-type{border-top:0}
+.ic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px}
+.ic.ok{background:var(--oks);color:var(--ok)}.ic.warn{background:var(--wns);color:var(--wn)}.ic.bad{background:var(--bads);color:var(--bad)}.ic.na{background:var(--c2);color:var(--mu)}
+.it b{display:block}.it span{color:var(--mu);font-size:14px;word-break:break-word}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--c2);font-size:14px}.kv span{color:var(--mu)}.kv b{text-align:end}
+small.n{display:block;color:var(--mu);margin-top:14px;font-size:13px;max-width:80ch}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="bar"><select id="lg" aria-label="Language"></select><button class="ib" id="thb" aria-label="Theme">◐</button></div>
+<h1>InputLab</h1>
+<nav role="tablist">
+ <button role="tab" aria-selected="true" data-t="kb" data-i="0"></button>
+ <button role="tab" aria-selected="false" data-t="ms" data-i="1"></button>
+ <button role="tab" aria-selected="false" data-t="rp" data-i="2"></button>
+</nav>
+
+<section id="p-kb">
+ <div class="card" style="margin-bottom:14px">
+  <p class="hint" data-i="3"></p>
+  <div class="grp"><span data-i="9"></span><div class="chips" id="cz"></div></div>
+  <div class="row" style="margin-bottom:10px">
+   <div class="card st"><b id="k1">0 / 0</b><span data-i="5"></span></div>
+   <div class="card st"><b id="k2">0</b><span data-i="6"></span></div>
+   <div class="card st"><b id="k3">0</b><span data-i="7"></span></div>
+   <div class="card st"><b id="k4">—</b><span data-i="8"></span></div>
+  </div>
+  <div class="lk"><span id="lkCapsLock">Caps</span><span id="lkNumLock">Num</span><span id="lkScrollLock">Scroll</span></div>
+  <div id="kbw"><div id="kb"></div></div>
+  <div class="lg"><span><i style="background:var(--oks)"></i>OK</span><span><i style="background:var(--ac)"></i>↓</span><span><i style="background:var(--bads)"></i>×2</span><span><i style="outline:1.5px dashed #8886;outline-offset:-2px"></i>Win / Fn / Prt…</span></div>
+  <div class="sp"></div><button class="btn" id="kR" data-i="15"></button>
+ </div>
+ <div class="card">
+  <h2 data-i="16"></h2>
+  <div id="tx"></div>
+  <input id="ti" type="text" autocomplete="off" spellcheck="false" aria-label="Typing">
+  <div class="row" style="margin:14px 0 0"><div class="st"><b id="wpm">—</b><span data-i="17"></span></div><div class="st"><b id="acc">—</b><span data-i="18"></span></div><div><button class="btn" id="tR" data-i="19"></button></div></div>
+ </div>
+</section>
+
+<section id="p-ms" hidden>
+ <div class="card" style="margin-bottom:14px">
+  <p class="hint" data-i="4"></p>
+  <div class="grp"><span data-i="10"></span><div class="chips" id="cc"></div></div>
+  <div class="grp" style="margin-bottom:0"><span data-i="11"></span><div class="chips" id="cb"></div></div>
+ </div>
+ <div class="row">
+  <div class="card st"><b id="m1">—</b><span data-i="21"></span></div>
+  <div class="card st"><b id="m2">0</b><span data-i="22"></span></div>
+  <div class="card st"><b id="m3">0 / 0</b><span data-i="23"></span></div>
+  <div class="card st"><b id="m4">—</b><span data-i="24"></span></div>
+ </div>
+ <div class="two">
+  <div><div id="pad" tabindex="0"><h2 data-i="25"></h2><p class="hint" style="margin:6px 0 0">L · M · R · ◀ · ▶ · ↑↓</p></div><div class="mb" id="mb"></div></div>
+  <div class="card"><h2 data-i="26"></h2><p class="hint" data-i="27"></p><button id="cps"></button></div>
+ </div>
+ <div class="sp"></div><button class="btn" id="mR" data-i="15"></button>
+</section>
+
+<section id="p-rp" hidden>
+ <div class="sc" id="sc"></div>
+ <div class="sum" id="sum"></div>
+ <div class="two"><div class="card"><h2 data-i="0"></h2><div id="rk"></div></div><div class="card"><h2 data-i="1"></h2><div id="rm"></div></div></div>
+ <div class="card" style="margin-top:14px"><h2 data-i="35"></h2><div id="inf"></div></div>
+ <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button class="btn p" id="cp" data-i="33"></button><span id="cpm" class="hint" style="margin:0"></span></div>
+ <small class="n" data-i="36"></small>
+</section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const sv=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},ld=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+/* i18n: positional strings, 56 per language */
+const L={
+uz:"Klaviatura|Sichqoncha|Hisobot|Har bir tugmani bosing. Ishlayotgan tugma yashil bo’ladi, kulrang qolgani nosoz bo’lishi mumkin. Noutbukda F1–F12 uchun Fn bosing.|Maydon ichida sichqonchaning barcha tugmalarini bosing, g’ildirakni aylantiring va kursorni tez harakatlantiring.|Tekshirilgan tugmalar|Bir vaqtda bosilganlar|Ikki marta yozilish|Oxirgi tugma|Klaviatura o’lchami|Ulanish|Tugmalar|Simli|Simsiz 2.4G|Bluetooth|Tozalash|Yozish tezligi testi|So’z/daqiqa|Aniqlik|Qayta|Shu yerga yozing…|Kursor chastotasi (Hz)|Ikki marta bosilish xatosi|G’ildirak ↑ / ↓|Eng yaxshi bosish/s|Test maydoni|Bosish tezligi testi|5 soniya davomida imkon qadar tez bosing.|Boshlash uchun bosing|Umumiy baho|E’tibor talab qiladi|Muammo topilmadi|Hali test yo’q|Hisobotni nusxalash|Nusxalandi|Qurilma ma’lumoti|Brauzer kirishni faqat dastur darajasida ko’radi. Javob bermagan tugma OT yoki drayver bloki ham bo’lishi mumkin. Win/Fn/DPI tugmalari ko’pincha ko’rinmaydi.|A’lo|Yaxshi|Qoniqarli|Nosoz|Tugmalar qamrovi|Ikki marta yozilgan tugmalar|Rollover (ko’p tugma)|Tugmani bosib turish vaqti|Takrorlash tezligi|Asosiy tugmalar|Yon tugmalar|G’ildirak|Sichqonchaning ikki marta bosilishi|Bosish tezligi|So’rov chastotasi|Barqarorlik (jitter)|Maks. tezlik|Bosish davomiyligi|Yo’q / tekshirilmagan",
+en:"Keyboard|Mouse|Report|Press every key. Working keys turn green; a key that stays gray may be faulty. On laptops press Fn for F1–F12.|Press every mouse button, scroll the wheel and move the cursor fast inside the area.|Keys tested|Simultaneous keys|Double-typing|Last key|Keyboard size|Connection|Buttons|Wired|Wireless 2.4G|Bluetooth|Reset|Typing speed test|Words/min|Accuracy|Retry|Start typing here…|Cursor rate (Hz)|Double-click glitches|Wheel ↑ / ↓|Best clicks/s|Test area|Click speed test|Click as fast as you can for 5 seconds.|Click to start|Overall score|Needs attention|No problems found|No tests yet|Copy report|Copied|Device info|The browser only sees input at software level. A silent key may also be an OS or driver block. Win/Fn/DPI buttons are often invisible to browsers.|Excellent|Good|Fair|Poor|Key coverage|Double-typing keys|Rollover (multi-key)|Key hold time|Key repeat rate|Main buttons|Side buttons|Wheel|Mouse double-click glitch|Click speed|Polling rate|Stability (jitter)|Max speed|Click duration|Missing / untested",
+ru:"Клавиатура|Мышь|Отчёт|Нажмите каждую клавишу. Рабочие клавиши становятся зелёными, серая клавиша может быть неисправна. На ноутбуке для F1–F12 нажимайте Fn.|Нажмите все кнопки мыши, покрутите колесо и быстро подвигайте курсор в области.|Проверено клавиш|Одновременно нажато|Двойной ввод|Последняя клавиша|Размер клавиатуры|Подключение|Кнопки|Проводная|Беспроводная 2.4G|Bluetooth|Сброс|Тест скорости печати|Слов/мин|Точность|Заново|Начните печатать здесь…|Частота курсора (Гц)|Ложные двойные клики|Колесо ↑ / ↓|Лучший результат кл./с|Область теста|Тест скорости кликов|Кликайте как можно быстрее 5 секунд.|Нажмите для старта|Общая оценка|Требует внимания|Проблем не найдено|Тестов пока нет|Копировать отчёт|Скопировано|Сведения об устройстве|Браузер видит ввод лишь на уровне ПО. Молчащая клавиша может быть блокировкой ОС или драйвера. Клавиши Win/Fn/DPI часто не видны.|Отлично|Хорошо|Удовлетворительно|Плохо|Охват клавиш|Клавиши с двойным вводом|Rollover (несколько клавиш)|Время удержания клавиши|Частота автоповтора|Основные кнопки|Боковые кнопки|Колесо|Ложный двойной клик мыши|Скорость кликов|Частота опроса|Стабильность (джиттер)|Макс. скорость|Длительность клика|Нет / не проверено",
+tr:"Klavye|Fare|Rapor|Her tuşa basın. Çalışan tuşlar yeşil olur, gri kalan tuş arızalı olabilir. Dizüstüde F1–F12 için Fn’ye basın.|Alanın içinde farenin tüm düğmelerine basın, tekerleği çevirin ve imleci hızlıca hareket ettirin.|Test edilen tuşlar|Aynı anda basılan|Çift yazma|Son tuş|Klavye boyutu|Bağlantı|Düğmeler|Kablolu|Kablosuz 2.4G|Bluetooth|Sıfırla|Yazma hızı testi|Kelime/dk|Doğruluk|Tekrar|Buraya yazmaya başlayın…|İmleç hızı (Hz)|Çift tıklama hataları|Tekerlek ↑ / ↓|En iyi tık/sn|Test alanı|Tıklama hızı testi|5 saniye boyunca olabildiğince hızlı tıklayın.|Başlamak için tıklayın|Genel puan|Dikkat gerektirenler|Sorun bulunamadı|Henüz test yok|Raporu kopyala|Kopyalandı|Cihaz bilgisi|Tarayıcı girişi yalnızca yazılım düzeyinde görür. Sessiz bir tuş işletim sistemi veya sürücü engeli de olabilir. Win/Fn/DPI tuşları çoğu zaman görünmez.|Mükemmel|İyi|Orta|Zayıf|Tuş kapsamı|Çift yazan tuşlar|Rollover (çoklu tuş)|Tuşa basılı tutma süresi|Tekrar hızı|Ana düğmeler|Yan düğmeler|Tekerlek|Farede çift tıklama hatası|Tıklama hızı|Yoklama hızı|Kararlılık (jitter)|En yüksek hız|Tıklama süresi|Eksik / test edilmedi",
+zh:"键盘|鼠标|报告|依次按下每个按键。正常的按键会变绿，保持灰色的按键可能已损坏。笔记本请配合 Fn 测试 F1–F12。|在区域内按下鼠标所有按键、滚动滚轮并快速移动光标。|已测试按键|同时按下数|重复输入|最后按键|键盘尺寸|连接方式|按键数|有线|无线 2.4G|蓝牙|重置|打字速度测试|字/分钟|准确率|重试|在此开始输入…|光标频率 (Hz)|双击异常|滚轮 ↑ / ↓|最高点击/秒|测试区域|点击速度测试|5 秒内尽可能快地点击。|点击开始|综合评分|需要注意|未发现问题|尚未测试|复制报告|已复制|设备信息|浏览器只能在软件层面读取输入。按键无反应也可能是系统或驱动拦截。Win/Fn/DPI 键通常无法检测。|优秀|良好|一般|较差|按键覆盖率|重复输入的按键|同时按键 (Rollover)|按键按压时长|按键重复速率|主要按键|侧键|滚轮|鼠标双击异常|点击速度|轮询率|稳定性 (抖动)|最高速度|点击时长|缺失 / 未测试",
+hi:"कीबोर्ड|माउस|रिपोर्ट|हर कुंजी दबाएँ। काम करने वाली कुंजी हरी हो जाती है, ग्रे रहने वाली कुंजी खराब हो सकती है। लैपटॉप में F1–F12 के लिए Fn दबाएँ।|क्षेत्र में माउस के सभी बटन दबाएँ, व्हील घुमाएँ और कर्सर को तेज़ी से चलाएँ।|जाँची गई कुंजियाँ|एक साथ दबी कुंजियाँ|दोहरी टाइपिंग|अंतिम कुंजी|कीबोर्ड का आकार|कनेक्शन|बटन|तार वाला|वायरलेस 2.4G|ब्लूटूथ|रीसेट|टाइपिंग गति परीक्षण|शब्द/मिनट|सटीकता|फिर से|यहाँ टाइप करना शुरू करें…|कर्सर दर (Hz)|डबल-क्लिक गड़बड़ी|व्हील ↑ / ↓|सर्वश्रेष्ठ क्लिक/सेकंड|परीक्षण क्षेत्र|क्लिक गति परीक्षण|5 सेकंड तक जितनी तेज़ हो सके क्लिक करें।|शुरू करने के लिए क्लिक करें|कुल स्कोर|ध्यान देने योग्य|कोई समस्या नहीं मिली|अभी कोई परीक्षण नहीं|रिपोर्ट कॉपी करें|कॉपी हो गया|डिवाइस जानकारी|ब्राउज़र इनपुट केवल सॉफ़्टवेयर स्तर पर देखता है। जवाब न देने वाली कुंजी OS या ड्राइवर की रुकावट भी हो सकती है। Win/Fn/DPI कुंजियाँ अक्सर दिखाई नहीं देतीं।|उत्कृष्ट|अच्छा|ठीक-ठाक|खराब|कुंजी कवरेज|दोहरी टाइप होने वाली कुंजियाँ|रोलओवर (एकाधिक कुंजी)|कुंजी दबाए रखने का समय|कुंजी दोहराव दर|मुख्य बटन|साइड बटन|व्हील|माउस डबल-क्लिक गड़बड़ी|क्लिक गति|पोलिंग दर|स्थिरता (जिटर)|अधिकतम गति|क्लिक अवधि|अनुपस्थित / अपरीक्षित",
+es:"Teclado|Ratón|Informe|Pulsa cada tecla. Las que funcionan se ponen verdes; una que siga gris puede estar averiada. En portátiles usa Fn para F1–F12.|Pulsa todos los botones del ratón, gira la rueda y mueve el cursor rápido dentro del área.|Teclas probadas|Teclas simultáneas|Doble pulsación|Última tecla|Tamaño del teclado|Conexión|Botones|Cableado|Inalámbrico 2.4G|Bluetooth|Reiniciar|Prueba de velocidad de escritura|Palabras/min|Precisión|Reintentar|Empieza a escribir aquí…|Frecuencia del cursor (Hz)|Fallos de doble clic|Rueda ↑ / ↓|Mejor clics/s|Área de prueba|Prueba de velocidad de clic|Haz clic lo más rápido posible durante 5 segundos.|Haz clic para empezar|Puntuación global|Requiere atención|No se encontraron problemas|Aún sin pruebas|Copiar informe|Copiado|Info del dispositivo|El navegador solo ve la entrada a nivel de software. Una tecla muda también puede ser un bloqueo del SO o del controlador. Las teclas Win/Fn/DPI suelen ser invisibles.|Excelente|Buena|Aceptable|Mala|Cobertura de teclas|Teclas con doble pulsación|Rollover (multitecla)|Tiempo de pulsación|Velocidad de repetición|Botones principales|Botones laterales|Rueda|Fallo de doble clic del ratón|Velocidad de clic|Frecuencia de sondeo|Estabilidad (jitter)|Velocidad máx.|Duración del clic|Faltan / sin probar",
+fr:"Clavier|Souris|Rapport|Appuyez sur chaque touche. Les touches fonctionnelles deviennent vertes ; une touche restée grise peut être défectueuse. Sur portable, utilisez Fn pour F1–F12.|Appuyez sur tous les boutons de la souris, tournez la molette et bougez vite le curseur dans la zone.|Touches testées|Touches simultanées|Double frappe|Dernière touche|Taille du clavier|Connexion|Boutons|Filaire|Sans fil 2.4G|Bluetooth|Réinitialiser|Test de vitesse de frappe|Mots/min|Précision|Réessayer|Commencez à écrire ici…|Fréquence du curseur (Hz)|Défauts de double-clic|Molette ↑ / ↓|Meilleur clics/s|Zone de test|Test de vitesse de clic|Cliquez le plus vite possible pendant 5 secondes.|Cliquez pour démarrer|Score global|À surveiller|Aucun problème détecté|Aucun test pour l’instant|Copier le rapport|Copié|Infos appareil|Le navigateur ne voit la saisie qu’au niveau logiciel. Une touche muette peut aussi venir d’un blocage du système ou du pilote. Les touches Win/Fn/DPI sont souvent invisibles.|Excellent|Bon|Moyen|Faible|Couverture des touches|Touches à double frappe|Rollover (multi-touches)|Durée d’appui|Fréquence de répétition|Boutons principaux|Boutons latéraux|Molette|Défaut de double-clic souris|Vitesse de clic|Fréquence d’interrogation|Stabilité (gigue)|Vitesse max.|Durée du clic|Manquantes / non testées",
+ar:"لوحة المفاتيح|الماوس|التقرير|اضغط كل مفتاح. تتحول المفاتيح السليمة إلى الأخضر، وقد يكون المفتاح الذي يبقى رماديًا معطلًا. في الحاسوب المحمول استخدم Fn لمفاتيح F1–F12.|اضغط جميع أزرار الماوس وحرّك العجلة وحرّك المؤشر بسرعة داخل المنطقة.|المفاتيح المختبرة|مفاتيح مضغوطة معًا|كتابة مزدوجة|آخر مفتاح|حجم لوحة المفاتيح|الاتصال|الأزرار|سلكي|لاسلكي 2.4G|بلوتوث|إعادة ضبط|اختبار سرعة الكتابة|كلمة/دقيقة|الدقة|إعادة|ابدأ الكتابة هنا…|تردد المؤشر (Hz)|أخطاء النقر المزدوج|العجلة ↑ / ↓|أفضل نقرات/ثانية|منطقة الاختبار|اختبار سرعة النقر|انقر بأسرع ما يمكن لمدة 5 ثوانٍ.|انقر للبدء|النتيجة الإجمالية|يحتاج إلى انتباه|لم يتم العثور على مشاكل|لا توجد اختبارات بعد|نسخ التقرير|تم النسخ|معلومات الجهاز|يرى المتصفح الإدخال على مستوى البرنامج فقط. قد يكون المفتاح الصامت محجوبًا من النظام أو التعريف. مفاتيح Win/Fn/DPI غالبًا غير مرئية.|ممتاز|جيد|مقبول|ضعيف|تغطية المفاتيح|مفاتيح بكتابة مزدوجة|الضغط المتعدد (Rollover)|مدة الضغط على المفتاح|معدل تكرار المفتاح|الأزرار الرئيسية|الأزرار الجانبية|العجلة|خطأ النقر المزدوج للماوس|سرعة النقر|معدل الاستطلاع|الثبات (Jitter)|أقصى سرعة|مدة النقر|مفقودة / لم تُختبر",
+pt:"Teclado|Mouse|Relatório|Pressione cada tecla. As que funcionam ficam verdes; uma que continue cinza pode estar com defeito. Em notebooks use Fn para F1–F12.|Pressione todos os botões do mouse, gire a roda e mova o cursor rápido dentro da área.|Teclas testadas|Teclas simultâneas|Digitação dupla|Última tecla|Tamanho do teclado|Conexão|Botões|Com fio|Sem fio 2.4G|Bluetooth|Redefinir|Teste de velocidade de digitação|Palavras/min|Precisão|Repetir|Comece a digitar aqui…|Taxa do cursor (Hz)|Falhas de clique duplo|Roda ↑ / ↓|Melhor cliques/s|Área de teste|Teste de velocidade de clique|Clique o mais rápido possível por 5 segundos.|Clique para iniciar|Pontuação geral|Requer atenção|Nenhum problema encontrado|Nenhum teste ainda|Copiar relatório|Copiado|Info do dispositivo|O navegador só vê a entrada no nível de software. Uma tecla muda também pode ser bloqueio do SO ou driver. Teclas Win/Fn/DPI costumam ser invisíveis.|Excelente|Bom|Regular|Ruim|Cobertura de teclas|Teclas com digitação dupla|Rollover (multitecla)|Tempo de pressão|Taxa de repetição|Botões principais|Botões laterais|Roda|Falha de clique duplo do mouse|Velocidade de clique|Taxa de polling|Estabilidade (jitter)|Velocidade máx.|Duração do clique|Ausentes / não testadas",
+de:"Tastatur|Maus|Bericht|Drücken Sie jede Taste. Funktionierende Tasten werden grün; eine graue Taste ist evtl. defekt. Am Laptop für F1–F12 Fn drücken.|Drücken Sie alle Maustasten, drehen Sie das Rad und bewegen Sie den Cursor schnell im Bereich.|Getestete Tasten|Gleichzeitig gedrückt|Doppelanschlag|Letzte Taste|Tastaturgröße|Verbindung|Tasten|Kabelgebunden|Funk 2.4G|Bluetooth|Zurücksetzen|Schreibtempo-Test|Wörter/Min|Genauigkeit|Nochmal|Hier mit dem Tippen beginnen…|Cursor-Rate (Hz)|Doppelklick-Fehler|Rad ↑ / ↓|Beste Klicks/s|Testbereich|Klicktempo-Test|Klicken Sie 5 Sekunden lang so schnell wie möglich.|Zum Starten klicken|Gesamtwertung|Beachten|Keine Probleme gefunden|Noch keine Tests|Bericht kopieren|Kopiert|Geräteinfo|Der Browser sieht Eingaben nur auf Softwareebene. Eine stumme Taste kann auch von System oder Treiber blockiert sein. Win/Fn/DPI-Tasten sind oft unsichtbar.|Ausgezeichnet|Gut|Mittel|Schwach|Tastenabdeckung|Tasten mit Doppelanschlag|Rollover (Mehrfachtasten)|Tastenhaltedauer|Wiederholrate|Haupttasten|Seitentasten|Mausrad|Maus-Doppelklick-Fehler|Klicktempo|Abtastrate|Stabilität (Jitter)|Höchstgeschwindigkeit|Klickdauer|Fehlend / ungetestet"};
+const LN={uz:"Oʻzbekcha",en:"English",ru:"Русский",tr:"Türkçe",zh:"中文",hi:"हिन्दी",es:"Español",fr:"Français",ar:"العربية",pt:"Português",de:"Deutsch"};
+const D=Object.fromEntries(Object.entries(L).map(([k,v])=>[k,v.split("|")]));
+let lang=ld("il");if(!D[lang])lang="uz";
+const tr=i=>(D[lang]&&D[lang][i])||D.en[i];
+$("#lg").innerHTML=Object.entries(LN).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
+$("#lg").onchange=e=>{lang=e.target.value;sv("il",lang);aL()};
+
+/* keyboard layouts */
+const N=s=>[...s].map(x=>["Key"+x,x]),Fk=(a,b)=>Array.from({length:b-a+1},(_,i)=>["F"+(a+i),"F"+(a+i)]);
+const pl=(x,y,a)=>a.flatMap(([c,l,w=1,h=1])=>{const r=c?[{c,l,x,y,w,h}]:[];x+=w;return r});
+const D10=[..."1234567890"].map(n=>["Digit"+n,n]);
+const R1=m=>[["Backquote","`"],...D10,["Minus","-"],["Equal","="],["Backspace",m?"del":"Bksp",2]];
+const R2=()=>[["Tab","Tab",1.5],...N("QWERTYUIOP"),["BracketLeft","["],["BracketRight","]"],["Backslash","\\",1.5]];
+const R3=m=>[["CapsLock","Caps",1.75],...N("ASDFGHJKL"),["Semicolon",";"],["Quote","'"],["Enter",m?"return":"Enter",2.25]];
+const R4=r=>[["ShiftLeft","Shift",2.25],...N("ZXCVBNM"),["Comma",","],["Period","."],["Slash","/"],["ShiftRight","Shift",r||2.75]];
+const R5=()=>[["ControlLeft","Ctrl",1.5],["MetaLeft","Win",1.25],["AltLeft","Alt",1.25],["Space","Space",5.75],["AltRight","Alt",1.25],["MetaRight","Win",1.25],["ContextMenu","Menu",1.25],["ControlRight","Ctrl",1.5]];
+const NL={Delete:"Del",Home:"Home",PageUp:"PgUp",PageDown:"PgDn"};
+const OPT=new Set(["MetaLeft","MetaRight","ContextMenu","PrintScreen","ScrollLock","Pause","Fn","Power"]);
+function layout(id){
+ const K=[],a=(x,y,s)=>K.push(...pl(x,y,s)),ha=(x,y)=>K.push({c:"ArrowLeft",l:"←",x,y,w:1,h:1},{c:"ArrowUp",l:"↑",x:x+1,y,w:1,h:.5},{c:"ArrowDown",l:"↓",x:x+1,y:y+.5,w:1,h:.5},{c:"ArrowRight",l:"→",x:x+2,y,w:1,h:1});
+ if(id==="full"||id==="tkl"){
+  a(0,0,[["Escape","Esc"],["","",1],...Fk(1,4),["","",.5],...Fk(5,8),["","",.5],...Fk(9,12)]);
+  a(15.5,0,[["PrintScreen","Prt"],["ScrollLock","Scr"],["Pause","Pse"]]);
+  a(0,1.5,R1());a(0,2.5,R2());a(0,3.5,R3());a(0,4.5,R4());a(0,5.5,R5());
+  a(15.5,1.5,[["Insert","Ins"],["Home","Home"],["PageUp","PgUp"]]);a(15.5,2.5,[["Delete","Del"],["End","End"],["PageDown","PgDn"]]);
+  a(16.5,4.5,[["ArrowUp","↑"]]);a(15.5,5.5,[["ArrowLeft","←"],["ArrowDown","↓"],["ArrowRight","→"]]);
+  if(id==="full"){
+   a(19,1.5,[["NumLock","Num"],["NumpadDivide","/"],["NumpadMultiply","*"],["NumpadSubtract","-"]]);
+   a(19,2.5,[["Numpad7","7"],["Numpad8","8"],["Numpad9","9"],["NumpadAdd","+",1,2]]);a(19,3.5,[["Numpad4","4"],["Numpad5","5"],["Numpad6","6"]]);
+   a(19,4.5,[["Numpad1","1"],["Numpad2","2"],["Numpad3","3"],["NumpadEnter","Ent",1,2]]);a(19,5.5,[["Numpad0","0",2],["NumpadDecimal","."]]);
+  }
+ }else if(id==="75"||id==="65"){
+  const o=id==="75"?1:0,rt=o?["Home","PageUp","PageDown"]:["Delete","PageUp","PageDown"],q=c=>[c,NL[c]];
+  if(o)a(0,0,[["Escape","Esc"],...Fk(1,12),["PrintScreen","Prt"],["Insert","Ins"],["Delete","Del"]]);
+  a(0,o,[...R1(),q(rt[0])]);a(0,o+1,[...R2(),q(rt[1])]);a(0,o+2,[...R3(),q(rt[2])]);
+  a(0,o+3,[...R4(1.75),["ArrowUp","↑"],["End","End"]]);
+  a(0,o+4,[["ControlLeft","Ctrl",1.25],["MetaLeft","Win",1.25],["AltLeft","Alt",1.25],["Space","Space",7.25],["AltRight","Alt"],["ControlRight","Ctrl"],["ArrowLeft","←"],["ArrowDown","↓"],["ArrowRight","→"]]);
+ }else if(id==="60"){a(0,0,R1());a(0,1,R2());a(0,2,R3());a(0,3,R4());a(0,4,R5())}
+ else if(id==="40"){
+  a(0,0,[...N("QWERTYUIOP"),["Backspace","Bksp",2]]);a(0,1,[...N("ASDFGHJKL"),["Quote","'"],["Enter","Enter",2]]);
+  a(0,2,[["ShiftLeft","Shift",1.5],...N("ZXCVBNM"),["Comma",","],["Period","."],["ShiftRight","Shift",1.5]]);
+  a(0,3,[["ControlLeft","Ctrl",1.5],["MetaLeft","Win"],["AltLeft","Alt",1.5],["Space","Space",5],["AltRight","Alt",1.5],["ControlRight","Ctrl",1.5]]);
+ }else if(id==="mac"){
+  a(0,0,[["Escape","esc",1.5],...Fk(1,12),["Power","⏻",1.5]]);a(0,1,R1(1));a(0,2,R2());a(0,3,R3(1));a(0,4,R4());
+  a(0,5,[["Fn","fn"],["ControlLeft","⌃"],["AltLeft","⌥",1.25],["MetaLeft","⌘",1.25],["Space","Space",5],["MetaRight","⌘",1.25],["AltRight","⌥",1.25]]);ha(12,5);
+ }else{
+  a(0,0,[["Escape","Esc"],...Fk(1,12),["Insert","Ins"],["Delete","Del"]]);a(0,1,R1());a(0,2,R2());a(0,3,R3());a(0,4,R4());
+  a(0,5,[["ControlLeft","Ctrl",1.25],["MetaLeft","Win",1.25],["AltLeft","Alt",1.25],["Space","Space",5.75],["AltRight","Alt",1.25],["ControlRight","Ctrl",1.25]]);ha(12,5);
+ }
+ return K;
+}
+const SZ=[["full","100%"],["tkl","TKL 80%"],["75","75%"],["65","65%"],["60","60%"],["40","40%"],["lap","Laptop"],["mac","MacBook"]],SZN=Object.fromEntries(SZ);
+const PF={size:"full",conn:"wired",btns:5};
+let CUR=[],LAB={},KW=15,tab="kb";
+const newKb=()=>({p:new Set(),dn:new Set(),max:0,ch:{},last:{},ds:{},dw:[],lr:{},rp:[]});
+const newMs=()=>({b:{},up:0,dn:0,dbl:0,ch:0,ld:{},ds:{},dw:[],cps:null,ts:[],hz:null,j:null,sp:0,lt:null,dl:0,lit:new Set()});
+let KB=newKb(),M=newMs();
+const reqCodes=()=>CUR.filter(k=>!OPT.has(k.c)).map(k=>k.c);
+function kbR(){
+ CUR=layout(PF.size);LAB={};CUR.forEach(k=>LAB[k.c]=k.l);
+ const my=Math.max(...CUR.map(k=>k.y+k.h));KW=Math.max(...CUR.map(k=>k.x+k.w));
+ $("#kb").style.height="calc(var(--u)*"+my+" + 16px)";
+ $("#kb").innerHTML=CUR.map(k=>`<div class="key${OPT.has(k.c)?" op":""}" data-c="${k.c}" style="left:calc(var(--u)*${k.x} + 10px);top:calc(var(--u)*${k.y} + 10px);width:calc(var(--u)*${k.w} - 4px);height:calc(var(--u)*${k.h} - 4px)">${k.l}</div>`).join("");
+ fit();kbU();
+}
+function fit(){const w=$("#kbw").clientWidth-16;if(w<=0)return;const u=Math.max(26,Math.min(52,Math.floor(w/KW)));$("#kb").style.setProperty("--u",u+"px");$("#kb").style.width=(u*KW+16)+"px"}
+addEventListener("resize",fit);
+function kbU(){
+ const rq=reqCodes();$("#k1").textContent=rq.filter(c=>KB.p.has(c)).length+" / "+rq.length;$("#k2").textContent=KB.max;
+ $("#k3").textContent=Object.values(KB.ch).reduce((a,b)=>a+b,0);
+ $$("#kb .key").forEach(e=>{const c=e.dataset.c;e.classList.toggle("ok",KB.p.has(c));e.classList.toggle("dn",KB.dn.has(c));e.classList.toggle("bd",!!KB.ch[c])});
+}
+const lks=e=>["CapsLock","NumLock","ScrollLock"].forEach(l=>{try{$("#lk"+l).classList.toggle("on",e.getModifierState(l))}catch(x){}});
+addEventListener("keydown",e=>{
+ if(tab!=="kb"||!e.code)return;
+ if(!["INPUT","SELECT"].includes(e.target.tagName))e.preventDefault();
+ const c=e.code,n=performance.now(),k=KB;
+ if(!e.repeat){if(k.last[c]!==undefined&&n-k.last[c]<35)k.ch[c]=(k.ch[c]||0)+1;k.last[c]=n;k.ds[c]=n}
+ else if(k.lr[c]&&n-k.lr[c]<250)k.rp.push(n-k.lr[c]);
+ k.lr[c]=n;k.p.add(c);k.dn.add(c);k.max=Math.max(k.max,k.dn.size);
+ $("#k4").textContent=LAB[c]||c;lks(e);kbU();
+});
+addEventListener("keyup",e=>{
+ if(tab!=="kb")return;const k=KB,c=e.code;
+ if(k.ds[c]!==undefined){const d=performance.now()-k.ds[c];if(d<600)k.dw.push(d);delete k.ds[c]}
+ k.dn.delete(c);lks(e);kbU();
+});
+addEventListener("blur",()=>{KB.dn.clear();kbU()});
+$("#kR").onclick=()=>{KB=newKb();$("#k4").textContent="—";kbU()};
+
+const TXT="The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.";
+let t0=null,tim=null,TY={wpm:null,acc:null};
+const rT=v=>{$("#tx").innerHTML=[...TXT].map((c,i)=>`<span class="${i<v.length?(v[i]===c?"g":"r"):i===v.length?"cur":""}">${c}</span>`).join("")};
+function fin(){
+ clearTimeout(tim);const v=$("#ti").value.slice(0,TXT.length);if(!v.length||!t0)return;
+ const ok=[...v].filter((c,i)=>c===TXT[i]).length,min=(performance.now()-t0)/60000;
+ TY={wpm:Math.round(ok/5/min),acc:Math.round(ok/v.length*100)};
+ $("#wpm").textContent=TY.wpm;$("#acc").textContent=TY.acc+"%";$("#ti").disabled=true;t0=null;
+}
+$("#ti").addEventListener("input",e=>{const v=e.target.value;if(!t0){t0=performance.now();tim=setTimeout(fin,30000)}rT(v);if(v.length>=TXT.length)fin()});
+$("#tR").onclick=()=>{clearTimeout(tim);t0=null;const i=$("#ti");i.disabled=false;i.value="";TY={wpm:null,acc:null};$("#wpm").textContent="—";$("#acc").textContent="—";rT("");i.focus()};
+rT("");
+
+/* mouse */
+const BL={0:"L",1:"M",2:"R",3:"◀",4:"▶"},EXP={2:[0,2],3:[0,1,2],4:[0,1,2,3],5:[0,1,2,3,4],6:[0,1,2,3,4],7:[0,1,2,3,4]};
+function rMp(){
+ const ex=EXP[PF.btns],xt=PF.btns>=7?[5,6]:PF.btns>=6?[5]:[];
+ $("#mb").innerHTML=[...ex,...xt].map(b=>`<span data-b="${b}" class="${M.lit.has(""+b)?"on":""}">${BL[b]||b}${xt.includes(b)?"*":""}</span>`).join("")+[["u","↑"],["d","↓"],["x","2×"]].map(([k,l])=>`<span data-b="${k}" class="${M.lit.has(k)?"on":""}">${l}</span>`).join("");
+}
+const lit=k=>{k=""+k;M.lit.add(k);const e=$(`#mb [data-b="${k}"]`);if(e)e.classList.add("on")};
+const pad=$("#pad");
+pad.addEventListener("mousedown",e=>{
+ e.preventDefault();pad.focus();const b=e.button,n=performance.now();
+ if(M.ld[b]!==undefined&&n-M.ld[b]<40)M.ch++;
+ M.ld[b]=n;M.ds[b]=n;M.b[b]=(M.b[b]||0)+1;lit(b);$("#m2").textContent=M.ch;
+});
+pad.addEventListener("mouseup",e=>{e.preventDefault();const s=M.ds[e.button];if(s!==undefined){const d=performance.now()-s;if(d<800)M.dw.push(d);delete M.ds[e.button]}});
+pad.addEventListener("auxclick",e=>e.preventDefault());
+pad.addEventListener("contextmenu",e=>e.preventDefault());
+pad.addEventListener("dblclick",()=>lit("x"));
+pad.addEventListener("wheel",e=>{e.preventDefault();if(e.deltaY<0){M.up++;lit("u")}else if(e.deltaY>0){M.dn++;lit("d")}M.dl=Math.round(Math.abs(e.deltaY));$("#m3").textContent=M.up+" / "+M.dn},{passive:false});
+const med=a=>{const s=[...a].sort((x,y)=>x-y);return s[s.length>>1]};
+pad.addEventListener("pointermove",e=>{
+ const l=e.getCoalescedEvents?e.getCoalescedEvents():[e];
+ for(const x of(l.length?l:[e]))M.ts.push(x.timeStamp);
+ if(M.ts.length>600)M.ts.splice(0,M.ts.length-600);
+ if(M.lt!=null){const dt=e.timeStamp-M.lt,v=Math.hypot(e.movementX,e.movementY)/dt*1000;if(dt>0&&dt<100&&isFinite(v)&&v<60000)M.sp=Math.max(M.sp,v)}
+ M.lt=e.timeStamp;
+ const d=[];for(let i=1;i<M.ts.length;i++){const v=M.ts[i]-M.ts[i-1];if(v>.2&&v<40)d.push(v)}
+ if(d.length>=30){const mn=d.reduce((a,b)=>a+b,0)/d.length;M.j=Math.round(Math.sqrt(d.reduce((a,b)=>a+(b-mn)**2,0)/d.length)/mn*100);M.hz=Math.min(1000,Math.round(1000/med(d)));$("#m1").textContent=M.hz}
+});
+let cn=0,cs=null,ct=null,lastC=null;const cb=$("#cps");
+const setCps=()=>{if(cs===null)cb.textContent=lastC||tr(28)};
+cb.addEventListener("mousedown",()=>{
+ if(cs===null){cn=0;cs=performance.now();ct=setInterval(()=>{const r=5-(performance.now()-cs)/1000;
+  if(r<=0){clearInterval(ct);const v=cn/5;M.cps=Math.max(M.cps||0,v);lastC=v.toFixed(1)+"/s  ↻";$("#m4").textContent=M.cps.toFixed(1);cs=null;setCps()}
+  else cb.textContent=r.toFixed(1)+" s · "+cn},100)}
+ if(cs!==null)cn++;
+});
+$("#mR").onclick=()=>{M=newMs();lastC=null;["m1","m4"].forEach(i=>$("#"+i).textContent="—");$("#m2").textContent=0;$("#m3").textContent="0 / 0";rMp();setCps()};
+
+/* device info */
+let hzD=null;(()=>{let n=0,t=null;const f=now=>{if(t===null)t=now;n++;if(now-t<1000)requestAnimationFrame(f);else hzD=Math.round(n*1000/(now-t))};requestAnimationFrame(f)})();
+let lay="?";try{navigator.keyboard.getLayoutMap().then(m=>{const q=m.get("KeyQ"),y=m.get("KeyY");lay=q==="a"?"AZERTY":y==="z"?"QWERTZ":q==="q"?"QWERTY":(q||"?").toUpperCase()}).catch(()=>{})}catch(e){}
+function info(){
+ const ua=navigator.userAgent,br=/Edg\//.test(ua)?"Edge":/OPR\//.test(ua)?"Opera":/Firefox\//.test(ua)?"Firefox":/Chrome\//.test(ua)?"Chrome":/Safari\//.test(ua)?"Safari":"?";
+ return[["OS",(navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||"?"],["Browser",br],["Screen",screen.width+"×"+screen.height+" @"+(window.devicePixelRatio||1)+"x"],["Display",hzD?hzD+" Hz":"…"],["CPU",navigator.hardwareConcurrency||"?"],["Layout",lay],["Touch",navigator.maxTouchPoints||0],["Lang",navigator.language||"?"]];
+}
+
+/* report */
+const PT={ok:1,warn:.5,bad:0},IC={ok:"✓",warn:"!",bad:"✕",na:"–"};
+const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+function build(){
+ const k=KB,K=[],Q=[],rq=reqCodes(),got=rq.filter(c=>k.p.has(c)),ms_=rq.filter(c=>!k.p.has(c)).map(c=>LAB[c]||c);
+ K.push({s:!got.length?"na":!ms_.length?"ok":got.length/rq.length>.6?"warn":"bad",n:41,d:got.length+" / "+rq.length+(ms_.length&&got.length?" · "+tr(55)+": "+ms_.join(", "):"")});
+ const dk=Object.keys(k.ch);
+ K.push({s:!got.length?"na":dk.length?"bad":"ok",n:42,d:dk.length?dk.map(c=>(LAB[c]||c)+" ×"+k.ch[c]).join(", "):"0"});
+ K.push({s:k.max<2?"na":k.max>=4?"ok":"warn",n:43,d:String(k.max)});
+ if(k.dw.length){const a=avg(k.dw);K.push({s:a<25||a>350?"warn":"ok",n:44,d:Math.round(a)+" ms"})}else K.push({s:"na",n:44,d:"—"});
+ K.push(k.rp.length>4?{s:"ok",n:45,d:Math.round(1000/med(k.rp))+" /s"}:{s:"na",n:45,d:"—"});
+ K.push({s:TY.wpm==null?"na":TY.wpm>=30&&TY.acc>=90?"ok":"warn",n:16,d:TY.wpm==null?"—":TY.wpm+" · "+TY.acc+"%"});
+ const ex=EXP[PF.btns],any=Object.values(M.b).some(v=>v),core=ex.filter(b=>b<3),side=ex.filter(b=>b>=3),mc=core.filter(b=>!M.b[b]).map(b=>BL[b]),sm=side.filter(b=>!M.b[b]).map(b=>BL[b]);
+ Q.push({s:!any?"na":!mc.length?"ok":"warn",n:46,d:mc.length?tr(55)+": "+mc.join(", "):core.map(b=>BL[b]).join(" ")+" ✓"});
+ if(side.length)Q.push({s:!any?"na":!sm.length?"ok":"warn",n:47,d:sm.length?tr(55)+": "+sm.join(", "):side.map(b=>BL[b]).join(" ")+" ✓"});
+ Q.push({s:!M.up&&!M.dn?"na":M.up&&M.dn?"ok":"warn",n:48,d:"↑ "+M.up+" / ↓ "+M.dn+(M.dl?" · Δ "+M.dl:"")});
+ Q.push({s:!any?"na":M.ch?"bad":"ok",n:49,d:String(M.ch)});
+ Q.push({s:M.cps==null?"na":M.cps>=6?"ok":"warn",n:50,d:M.cps==null?"—":M.cps.toFixed(1)+" /s"});
+ const g={wired:500,wl:125,bt:60}[PF.conn];
+ Q.push({s:M.hz==null?"na":M.hz>=g?"ok":"warn",n:51,d:M.hz==null?"—":M.hz+" Hz (≥ "+g+")"});
+ Q.push({s:M.j==null?"na":M.j<=40?"ok":"warn",n:52,d:M.j==null?"—":M.j+"%"});
+ Q.push({s:M.sp?"ok":"na",n:53,d:M.sp?Math.round(M.sp)+" px/s":"—"});
+ if(M.dw.length){const a=avg(M.dw);Q.push({s:a<25?"warn":"ok",n:54,d:Math.round(a)+" ms"})}else Q.push({s:"na",n:54,d:"—"});
+ return{K,Q};
+}
+const sco=a=>{const x=a.filter(i=>i.s!=="na");return x.length?Math.round(x.reduce((t,i)=>t+PT[i.s],0)/x.length*100):null};
+const vd=v=>v==null?tr(32):v>=90?tr(37):v>=75?tr(38):v>=50?tr(39):tr(40);
+const li=a=>a.map(i=>`<div class="it"><div class="ic ${i.s}" aria-hidden="true">${IC[i.s]}</div><div><b>${tr(i.n)}</b><span>${i.d}</span></div></div>`).join("");
+let RP=null;
+function report(){
+ const{K,Q}=build(),a=sco(K),b=sco(Q),av=[a,b].filter(v=>v!=null),o=av.length?Math.round(avg(av)):null;
+ RP={K,Q,a,b,o};
+ $("#sc").innerHTML=[[0,a],[1,b],[29,o]].map(([n,v])=>`<div class="card sc1"><div class="ring" style="--v:${v||0}"><i>${v==null?"–":v}</i></div><b>${tr(n)}</b><span>${vd(v)}</span></div>`).join("");
+ const bad=K.concat(Q).filter(i=>i.s==="bad"||i.s==="warn");
+ $("#sum").innerHTML=o==null?`<b>${tr(32)}</b>`:bad.length?`<b>${tr(30)}</b><ul>`+bad.map(i=>`<li><b>${tr(i.n)}:</b> ${i.d}</li>`).join("")+"</ul>":`<b>${tr(31)}</b>`;
+ $("#rk").innerHTML=`<p class="hint">${SZN[PF.size]}</p>`+li(K);
+ $("#rm").innerHTML=`<p class="hint">${tr({wired:12,wl:13,bt:14}[PF.conn])} · ${PF.btns>=7?"7+":PF.btns} ${tr(11)}</p>`+li(Q);
+ $("#inf").innerHTML=info().map(([k,v])=>`<div class="kv"><span>${k}</span><b>${v}</b></div>`).join("");
+}
+$("#cp").onclick=async()=>{
+ report();const r=RP,f=a=>a.map(i=>"- "+tr(i.n)+": "+i.d).join("\n");
+ const t=["InputLab",tr(29)+": "+(r.o??"—"),"",tr(0)+" ("+SZN[PF.size]+") "+(r.a??"—"),f(r.K),"",tr(1)+" ("+PF.conn+", "+PF.btns+") "+(r.b??"—"),f(r.Q),"",...info().map(([k,v])=>k+": "+v)].join("\n");
+ let ok=false;try{await navigator.clipboard.writeText(t);ok=true}catch(e){try{const x=document.createElement("textarea");x.value=t;document.body.appendChild(x);x.select();ok=document.execCommand("copy");x.remove()}catch(_){}}
+ $("#cpm").textContent=ok?tr(34):"";
+};
+
+/* chips, tabs, theme, language */
+function chips(id,list,cur,fn){
+ $("#"+id).innerHTML=list.map(([v,l])=>`<button class="chip" aria-pressed="${v==cur}" data-v="${v}">${l}</button>`).join("");
+ $$("#"+id+" .chip").forEach(b=>b.onclick=()=>{fn(b.dataset.v);chips(id,list,b.dataset.v,fn)});
+}
+function rC(){
+ chips("cz",SZ,PF.size,v=>{PF.size=v;kbR()});
+ chips("cc",[["wired",tr(12)],["wl",tr(13)],["bt",tr(14)]],PF.conn,v=>PF.conn=v);
+ chips("cb",[[2,"2"],[3,"3"],[4,"4"],[5,"5"],[6,"6"],[7,"7+"]],PF.btns,v=>{PF.btns=+v;rMp()});
+}
+function aL(){
+ document.documentElement.lang=lang;document.documentElement.dir=lang==="ar"?"rtl":"ltr";$("#lg").value=lang;
+ $$("[data-i]").forEach(e=>e.textContent=tr(+e.dataset.i));$("#ti").placeholder=tr(20);document.title="InputLab";
+ rC();setCps();if(tab==="rp")report();
+}
+let th=ld("it")||"auto";
+function aT(){const r=document.documentElement;if(th==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",th);$("#thb").textContent=th==="auto"?"◐":th==="light"?"☀":"☾"}
+$("#thb").onclick=()=>{th=th==="auto"?"light":th==="light"?"dark":"auto";sv("it",th);aT()};
+$$("nav button").forEach(b=>b.onclick=()=>{
+ tab=b.dataset.t;$$("nav button").forEach(x=>x.setAttribute("aria-selected",x===b));
+ ["kb","ms","rp"].forEach(t=>$("#p-"+t).hidden=t!==tab);
+ if(tab==="rp")report();if(tab==="kb")fit();
+});
+aT();aL();kbR();rMp();
+</script>
+</body>
+</html>
